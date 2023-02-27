@@ -1,3 +1,6 @@
 [submodule "axotec"]
 	path = axotec
 	url = https://github.com/dpflores/axotec
+[submodule "can_jd"]
+	path = can_jd
+	url = https://github.com/dpflores/can_jd
