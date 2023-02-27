@@ -6,6 +6,7 @@ apt update
 apt install net-tools
 apt install nano
 apt install git
+apt install python3-pip
 
 sudo apt install g++
 apt-get install make
