@@ -13,9 +13,10 @@ def talker():
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         gps_speed = gps.get_vel()
-        rospy.loginfo(gps_speed)
-        pub.publish(gps_speed)
-        rate.sleep()
+        if gps_speed is not None:
+            rospy.loginfo(gps_speed)
+            pub.publish(gps_speed)
+            rate.sleep()    
 
 # if __name__ == '__main__':
 #     try:
