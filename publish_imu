@@ -2,19 +2,19 @@
 
 import rospy
 from std_msgs.msg import Float32
-from axotec.gps import GPS  
+from can_jd.can_jd import CANJD 
 
-gps = GPS()
+imu = CANJD()   
 def talker():
     
-    pub = rospy.Publisher('gps_speed',Float32, queue_size=10)
-    rospy.init_node('gps_node', anonymous=True)
+    pub = rospy.Publisher('imu_speed',Float32, queue_size=10)
+    rospy.init_node('imu_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        gps_speed = gps.get_vel()
-        if gps_speed is not None:
-            rospy.loginfo(gps_speed)
-            pub.publish(gps_speed)
+        imu_speed = imu.get_speed_stimation()
+        if imu_speed is not None:
+            rospy.loginfo(imu_speed)
+            pub.publish(imu_speed)
             rate.sleep()    
 
 # if __name__ == '__main__':
