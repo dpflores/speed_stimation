@@ -1,0 +1,6 @@
+<launch>
+    <!-- Aca declaramos los nodos -->
+    <node pkg="speed_stimation" cwd="node" type="publish_gps" name="gps_node"/>
+    <node pkg="speed_stimation" cwd="node" type="publish_imu" name="gps_node"/>
+
+</launch>
