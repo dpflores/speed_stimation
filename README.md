@@ -1,5 +1,7 @@
+git clone --recurse-submodules https://github.com/dpflores/speed_stimation
 
 
+# para un nuevo dockerfile
 sudo docker run --name ros_container --privileged --network host -it ros:noetic-ros-core 
 
 apt update
