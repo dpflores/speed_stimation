@@ -9,7 +9,7 @@ class ComplementaryFilter:
         self.dt = 0.1
 
         # Ganancia del filtro complementario
-        self.alpha = 0.98
+        self.alpha = 0.6
 
         # Velocidad medida por el primer sensor
         self.vel1 = 0.0
