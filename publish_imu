@@ -11,11 +11,14 @@ def talker():
     rospy.init_node('imu_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        imu_speed = imu.get_accel_simplified()
-        if imu_speed is not None:
-            rospy.loginfo(imu_speed)
-            pub.publish(imu_speed)
-            rate.sleep()    
+        try:
+            imu_speed = imu.get_accel_simplified()
+            if imu_speed is not None:
+                rospy.loginfo(imu_speed)
+                pub.publish(imu_speed)
+                rate.sleep()   
+        except: 
+            pass
 
 # if __name__ == '__main__':
 #     try:
