@@ -1,31 +1,83 @@
 #!/usr/bin/env python3
 
 import rospy
+import kalman.kalman as kalman
 from std_msgs.msg import Float32
 
+class SpeedFilter:
+    def __init__(self):
+        # Frecuencia de muestreo
+        self.dt = 0.1
+
+        # Valores iniciales
+        self.xk = 0     
+        self.yk = 0
+        self.uk = 0
+        self.Pk = 0.01
+
+        # Matrices caracteristicas (en este caso solo son valores)
+        self.Fk = 1
+        self.Gk = self.dt
+        self.Hk = 1
+
+        # Valores de covarianza 
+        self.Qk = 0.0   # este va a variar
+        self.Rk = 0.01
+
+        # Inicializando filtro de kalman
+        self.speed_filter = kalman.LinearFilter(self.xk, self.yk, self.uk, self.Pk)
+
+        # Subscriptores a los tópicos de velocidad
+        rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
+        rospy.Subscriber("/imu_accel", Float32, self.imu_callback)
+
+        # Publicador de la velocidad filtrada
+        self.vel_filtrada_pub = rospy.Publisher("speed_filtered", Float32, queue_size=10)
+
+    def imu_callback(self, data):
+        # En esta funcion se haran las predicciones
+
+        # Primero hace la predicción con lo que ya tenemos
+        self.speed_filter.prediction_step(self.Fk,self.Gk,self.Qk)
+
+        # luego se actualizan los valores
+        imu_accel = data.data
+        self.speed_filter.uk = imu_accel
+
+        self.Qk += self.dt
 
 
 
-def on_gps(data):
-    rospy.loginfo(f"GPS speed: {data.data}")
+    def gps_callback(self, data):
+        # En esta funcion se haran las correcciones
 
-def on_imu(data):
-    rospy.loginfo(f"IMU speed: {data.data}")
+        # Primero hace la correción con lo que ya tenemos
+        self.speed_filter.correction_step(self.Hk,self.Rk)
 
-def main():
+        # Ahora si actualizamos
+        gps_vel = data.data
+        self.speed_filter.yk = gps_vel
 
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('speed_filter', anonymous=True)
 
-    rospy.Subscriber('/gps_speed', Float32, on_gps)
-    rospy.Subscriber('/imu_speed', Float32, on_imu)
+    def run(self):
+        # Bucle principal
+        while not rospy.is_shutdown():
+        
+            # Publica la velocidad filtrada
+            self.vel_filtrada_pub.publish(self.speed_filter.xk)
 
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+            # Espera para mantener la frecuencia de muestreo
+            rospy.sleep(self.dt)
 
 if __name__ == '__main__':
-    main()
+    # Inicializa el nodo ROS
+    rospy.init_node('speed_filter')
+
+    # Crea un objeto ComplementaryFilter
+    sf = SpeedFilter()
+
+    # Ejecuta el filtro complementario
+    sf.run()
+
+    # Para la ejecución del nodo ROS
+    rospy.spin()

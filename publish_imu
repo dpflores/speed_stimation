@@ -7,11 +7,11 @@ from can_jd.can_jd import CANJD
 imu = CANJD()   
 def talker():
     
-    pub = rospy.Publisher('imu_speed',Float32, queue_size=10)
+    pub = rospy.Publisher('imu_accel',Float32, queue_size=10)
     rospy.init_node('imu_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        imu_speed = imu.get_speed_stimation()
+        imu_speed = imu.get_accel_simplified()
         if imu_speed is not None:
             rospy.loginfo(imu_speed)
             pub.publish(imu_speed)
