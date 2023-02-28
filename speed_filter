@@ -9,22 +9,22 @@ class SpeedFilter:
     def __init__(self):
         # Frecuencia de muestreo
         self.dta = 0.1
-        self.dt = np.array([[0.1]])
+        self.dt = np.array([0.1])
 
         # Valores iniciales
-        self.xk = np.array([[0.0]])    
-        self.yk = np.array([[0.0]]) 
-        self.uk = np.array([[0.0]]) 
-        self.Pk = np.array([[0.01]])
+        self.xk = np.array([0.0])    
+        self.yk = np.array([0.0]) 
+        self.uk = np.array([0.0]) 
+        self.Pk = np.array([0.01])
 
         # Matrices caracteristicas (en este caso solo son valores)
-        self.Fk = np.array([[1.0]])
+        self.Fk = np.array([1.0])
         self.Gk = self.dt
-        self.Hk = np.array([[1.0]])
+        self.Hk = np.array([1.0])
 
         # Valores de covarianza 
-        self.Qk = np.array([[0.0]])   # este va a variar
-        self.Rk = np.array([[0.01]]) 
+        self.Qk = np.array([0.0])   # este va a variar
+        self.Rk = np.array([0.01]) 
 
         # Inicializando filtro de kalman
         self.speed_filter = kalman.LinearFilter(self.xk, self.yk, self.uk, self.Pk)
@@ -40,7 +40,7 @@ class SpeedFilter:
         # En esta funcion se haran las predicciones
 
         # Primero hace la predicción con lo que ya tenemos
-        self.speed_filter.prediction_step(self.Fk,self.Gk,self.Qk)
+        self.speed_filter.prediction_step(self.Fk, self.Gk, self.Qk)
 
         # luego se actualizan los valores
         imu_accel = data.data
