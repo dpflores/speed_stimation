@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import rospy
+import paho.mqtt.client as mqtt
+from std_msgs.msg import Float32
+
+USERNAME = 'AxotecPiloto'
+PASSWORD = '1234567890'
+
+# Server de ACME
+MQTT_SERVER = 'soldier.cloudmqtt.com'
+MQTT_PORT = 15258
+
+class MqttSender:
+    def __init__(self):
+        self.dt = 0.1
+        # Subscriptores a los tópicos de interes
+        rospy.Subscriber("/gps_speed", Float32, self.gps_callback,"/gps_speed")
+        rospy.Subscriber("/imu_accel", Float32, self.imu_callback,"/imu_accel")
+        rospy.Subscriber("/speed_filtered", Float32, self.filter_callback,"/speed_filtered")  
+
+        # mqtt
+        self.client = mqtt.Client()  
+        self.client.username_pw_set(USERNAME, PASSWORD)
+        self.client.connect(MQTT_SERVER, MQTT_PORT,60)
+        self.client.loop_start()
+
+    def imu_callback(self, data, topic):
+        self.client.publish(topic, data.data)
+        self.client.loop()
+
+    def gps_callback(self, data, topic):
+        self.client.publish(topic, data.data)
+        self.client.loop()
+
+    def filter_callback(self, data, topic):
+        self.client.publish(topic, data.data)
+        self.client.loop()
+
+    def run(self):
+        # Bucle principal
+        while not rospy.is_shutdown():
+            # Espera para mantener la frecuencia de muestreo
+            rospy.sleep(self.dt)
+
+if __name__ == '__main__':
+    # Inicializa el nodo ROS
+    rospy.init_node('mqtt_sender')
+
+    # Crea un objeto ComplementaryFilter
+    ms = MqttSender()
+
+    # Ejecuta el filtro complementario
+    ms.run()
+
+    # Para la ejecución del nodo ROS
+    rospy.spin()

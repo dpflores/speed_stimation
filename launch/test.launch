@@ -3,5 +3,6 @@
     <node pkg="speed_stimation" cwd="node" type="speed_filter" name="filter_node"/>
     <node pkg="speed_stimation" cwd="node" type="publish_gps" name="gps_node"/>
     <node pkg="speed_stimation" cwd="node" type="publish_imu" name="imu_node"/>
+    <node pkg="speed_stimation" cwd="node" type="sender_mqtt" name="sender_node"/>
 
 </launch>

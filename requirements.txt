@@ -1,0 +1,5 @@
+canopen==2.1.0
+python-can==4.1.0
+numpy==1.17.4
+paho-mqtt==1.6.1
+pyserial
