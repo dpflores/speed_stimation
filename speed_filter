@@ -46,7 +46,7 @@ class SpeedFilter:
         imu_accel = np.array([[data.data]])
         self.speed_filter.uk = imu_accel
 
-        self.Qk += self.dt
+        #self.Qk += self.dt
 
 
 
