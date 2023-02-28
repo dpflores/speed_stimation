@@ -8,6 +8,7 @@ from std_msgs.msg import Float32
 class SpeedFilter:
     def __init__(self):
         # Frecuencia de muestreo
+        self.dta = 0.1
         self.dt = np.array([[0.1]])
 
         # Valores iniciales
@@ -68,7 +69,7 @@ class SpeedFilter:
             self.vel_filtrada_pub.publish(self.speed_filter.xk)
 
             # Espera para mantener la frecuencia de muestreo
-            rospy.sleep(self.dt)
+            rospy.sleep(self.dta)
 
 if __name__ == '__main__':
     # Inicializa el nodo ROS
