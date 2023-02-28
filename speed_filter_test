@@ -30,16 +30,20 @@ class ComplementaryFilter:
     def vel1_callback(self, data):
         # Actualiza la velocidad medida por el primer sensor
         self.vel1 = data.data
+        self.vel_filtrada = (self.vel_filtrada + self.vel1 * self.dt)
+
 
     def vel2_callback(self, data):
         # Actualiza la velocidad medida por el segundo sensor
         self.vel2 = data.data
+        self.vel_filtrada = self.alpha * (self.vel_filtrada + self.vel1 * self.dt) + (1 - self.alpha) * self.vel2
+
 
     def run(self):
         # Bucle principal
         while not rospy.is_shutdown():
             # Combina las medidas de velocidad con el filtro complementario
-            self.vel_filtrada = self.alpha * (self.vel_filtrada + self.vel1 * self.dt) + (1 - self.alpha) * self.vel2
+            #self.vel_filtrada = self.alpha * (self.vel_filtrada + self.vel1 * self.dt) + (1 - self.alpha) * self.vel2
 
             # Publica la velocidad filtrada
             self.vel_filtrada_pub.publish(self.vel_filtrada)
