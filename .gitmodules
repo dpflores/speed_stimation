@@ -4,3 +4,6 @@
 [submodule "can_jd"]
 	path = can_jd
 	url = https://github.com/dpflores/can_jd
+[submodule "kalman"]
+	path = kalman
+	url = https://github.com/dpflores/kalman
