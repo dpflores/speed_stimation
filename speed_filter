@@ -40,6 +40,7 @@ class SpeedFilter:
         # En esta funcion se haran las predicciones
 
         # Primero hace la predicción con lo que ya tenemos
+        print(self.speed_filter.xk, self.Qk)
         self.speed_filter.prediction_step(self.Fk, self.Gk, self.Qk)
 
         # luego se actualizan los valores
