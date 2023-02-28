@@ -66,7 +66,7 @@ class SpeedFilter:
         while not rospy.is_shutdown():
         
             # Publica la velocidad filtrada
-            self.vel_filtrada_pub.publish(self.speed_filter.xk[0])
+            self.vel_filtrada_pub.publish(self.speed_filter.xk)
 
             # Espera para mantener la frecuencia de muestreo
             rospy.sleep(self.dta)
