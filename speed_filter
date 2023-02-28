@@ -4,6 +4,8 @@ import rospy
 from std_msgs.msg import Float32
 
 
+
+
 def on_gps(data):
     rospy.loginfo(f"GPS speed: {data.data}")
 
