@@ -43,7 +43,7 @@ class SpeedFilter:
         self.speed_filter.prediction_step(self.Fk, self.Gk, self.Qk)
 
         # luego se actualizan los valores
-        imu_accel = data.data
+        imu_accel = np.array([data.data])
         self.speed_filter.uk = imu_accel
 
         self.Qk += self.dt
@@ -57,7 +57,7 @@ class SpeedFilter:
         self.speed_filter.correction_step(self.Hk,self.Rk)
 
         # Ahora si actualizamos
-        gps_vel = data.data
+        gps_vel = np.array([data.data])
         self.speed_filter.yk = gps_vel
 
 
