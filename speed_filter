@@ -23,7 +23,7 @@ class SpeedFilter:
         self.Hk = np.array([[1.0]])
 
         # Valores de covarianza 
-        self.Qk = np.array([[0.0]])   # este va a variar
+        self.Qk = np.array([[self.dta**2]])   # este va a variar
         self.Rk = np.array([[0.01]]) 
 
         # Inicializando filtro de kalman
@@ -46,7 +46,7 @@ class SpeedFilter:
         imu_accel = np.array([[data.data]])
         self.speed_filter.uk = imu_accel
 
-        self.Qk += self.dt
+        #self.Qk += self.dt
 
 
 
