@@ -19,7 +19,7 @@ class SpeedFilter:
 
         # Matrices caracteristicas (en este caso solo son valores)
         self.Fk = np.array([[1.0]])
-        self.Gk = np.array([[self.dta]])
+        self.Gk = np.array([[self.dta**2]])
         self.Hk = np.array([[1.0]])
 
         # Valores de covarianza 
