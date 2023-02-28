@@ -1,28 +1,29 @@
 #!/usr/bin/env python3
 
 import rospy
+import numpy as np
 import kalman.kalman as kalman
 from std_msgs.msg import Float32
 
 class SpeedFilter:
     def __init__(self):
         # Frecuencia de muestreo
-        self.dt = 0.1
+        self.dt = np.array([[0.1]])
 
         # Valores iniciales
-        self.xk = 0     
-        self.yk = 0
-        self.uk = 0
-        self.Pk = 0.01
+        self.xk = np.array([[0.0]])    
+        self.yk = np.array([[0.0]]) 
+        self.uk = np.array([[0.0]]) 
+        self.Pk = np.array([[0.01]])
 
         # Matrices caracteristicas (en este caso solo son valores)
-        self.Fk = 1
+        self.Fk = np.array([[1.0]])
         self.Gk = self.dt
-        self.Hk = 1
+        self.Hk = np.array([[1.0]])
 
         # Valores de covarianza 
-        self.Qk = 0.0   # este va a variar
-        self.Rk = 0.01
+        self.Qk = np.array([[0.0]])   # este va a variar
+        self.Rk = np.array([[0.01]]) 
 
         # Inicializando filtro de kalman
         self.speed_filter = kalman.LinearFilter(self.xk, self.yk, self.uk, self.Pk)
