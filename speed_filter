@@ -61,7 +61,7 @@ class SpeedFilter:
         
         vx = self.speed_filter.xk[0,0]
         vy = self.speed_filter.xk[1,0]
-        vz = self.speed_filter.xk[1,0]
+        vz = self.speed_filter.xk[2,0]
 
         va = (vx**2 + vy**2 + vz**2)**(-1/2)    # constante solo para facilitar el trabajo
 
