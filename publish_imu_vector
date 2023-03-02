@@ -15,7 +15,7 @@ def talker():
     
     while not rospy.is_shutdown():
         try:
-            imu_array = imu.get_accel()
+            imu_array = np.array(imu.get_accel(),1)
 
             if imu_array is not None:
                 current_time = rospy.Time.now()
