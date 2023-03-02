@@ -15,7 +15,7 @@ class SpeedFilter:
         self.dt = np.array([[self.dta]])
 
         # Valores iniciales
-        self.xk = np.array([[0.0, 0.0, 0.0]]).T    
+        self.xk = np.array([[0.0001, 0.0001, 0.0001]]).T    
         self.yk = np.array([[0.0]])
         self.uk = np.array([[0.0, 0.0, 0.0]]).T  
         self.Pk = 0.1*np.eye(3)
