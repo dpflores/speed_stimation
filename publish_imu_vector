@@ -8,8 +8,8 @@ import numpy as np
 imu = CANJD()   
 def talker():
     imu_msg = Imu()
-    pub = rospy.Publisher('imu_accel',Imu, queue_size=10)
-    rospy.init_node('imu_node', anonymous=True)
+    pub = rospy.Publisher('imu_accel_vector',Imu, queue_size=10)
+    rospy.init_node('imu_vector_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         try:
