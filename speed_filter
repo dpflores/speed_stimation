@@ -27,7 +27,7 @@ class SpeedFilter:
         
         # Valores de covarianza 
         self.Qk = (self.dta**2)*np.eye(3)         # De nuestro modelo
-        self.Rk = np.array([[0.0001]])             # De la medición
+        self.Rk = np.array([[0.001]])             # De la medición
 
         # Inicializando filtro de kalman
         self.speed_filter = kalman.ExtendedFilter(self.xk, self.yk, self.uk, self.Pk)
