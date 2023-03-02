@@ -53,7 +53,7 @@ class SpeedFilter:
         imu_accel = np.array([[ax, ay, az]]).T 
         self.speed_filter.uk = imu_accel
 
-        self.Qk += self.dta
+        self.Qk -= self.dta
 
 
     def gps_callback(self, data):
