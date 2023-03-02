@@ -6,6 +6,7 @@ import rospy
 import numpy as np
 import kalman.kalman as kalman
 from std_msgs.msg import Float32
+from sensor_msgs.msg import Imu
 
 class SpeedFilter:
     def __init__(self):
@@ -34,7 +35,7 @@ class SpeedFilter:
 
         # Subscriptores a los tópicos de velocidad
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
-        rospy.Subscriber("/imu_accel_vector", Float32, self.imu_callback)
+        rospy.Subscriber("/imu_accel_vector", Imu, self.imu_callback)
 
         # Publicador de la velocidad filtrada
         self.vel_filtrada_pub = rospy.Publisher("speed_filtered", Float32, queue_size=10)
