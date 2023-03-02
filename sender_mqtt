@@ -40,8 +40,8 @@ class MqttSender:
         while not rospy.is_shutdown():
             # Espera para mantener la frecuencia de muestreo
             # Publicamos al broker cada 0.5 s
-            self.client.publish("/gps_speed", 3.8*self.gps_speed)
-            self.client.publish("/speed_filtered", 3.8*self.filtered_speed)
+            self.client.publish("/gps_speed", self.gps_speed)
+            self.client.publish("/speed_filtered", self.filtered_speed)
             self.client.loop()
             rospy.sleep(self.dt)
 
