@@ -41,7 +41,6 @@ class SpeedFilter:
 
     def imu_callback(self, data):
         # En esta funcion se haran las predicciones
-        print(self.speed_filter.xk, self.speed_filter.uk)
         # Primero hace la predicción con lo que ya tenemosf
         f = self.speed_filter.xk + self.dta*self.speed_filter.uk
         
