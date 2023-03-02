@@ -17,7 +17,7 @@ def talker():
             imu_array = imu.get_accel()
 
             if imu_array is not None:
-                rospy.loginfo(imu_array)
+                # rospy.loginfo(imu_array)
                 imu_msg.linear_acceleration.x = imu_array[0,0]
                 imu_msg.linear_acceleration.y = imu_array[1,0]
                 imu_msg.linear_acceleration.z = imu_array[2,0]
