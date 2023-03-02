@@ -34,7 +34,7 @@ class SpeedFilter:
 
         # Subscriptores a los tópicos de velocidad
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
-        rospy.Subscriber("/imu_accel", Float32, self.imu_callback)
+        rospy.Subscriber("/imu_accel_vector", Float32, self.imu_callback)
 
         # Publicador de la velocidad filtrada
         self.vel_filtrada_pub = rospy.Publisher("speed_filtered", Float32, queue_size=10)
@@ -46,8 +46,11 @@ class SpeedFilter:
         f = self.speed_filter.xk + self.dt@self.speed_filter.uk
         self.speed_filter.prediction_step(f, self.Fk, self.Lk, self.Qk)
 
+        ax = data.linear_acceleration.x
+        ay = data.linear_acceleration.y
+        az = data.linear_acceleration.z
         # luego se actualizan los valores
-        imu_accel = np.array([[data.data]])     ## CORREGIR LOS 3 DATOS
+        imu_accel = np.array([[ax, ay, az]]).T 
         self.speed_filter.uk = imu_accel
 
 
