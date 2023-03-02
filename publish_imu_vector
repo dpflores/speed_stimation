@@ -14,22 +14,22 @@ def talker():
     rate = rospy.Rate(10) # 10hz
     
     while not rospy.is_shutdown():
-        try:
-            imu_array = imu.get_accel()
+        # try:
+        imu_array = imu.get_accel()
 
-            if imu_array is not None:
-                current_time = rospy.Time.now()
-                imu_msg.header.stamp = current_time
-                imu_msg.header.frame_id = 'imu_frame'
-                # rospy.loginfo(imu_array)
-                imu_msg.linear_acceleration.x = imu_array[0,0]
-                imu_msg.linear_acceleration.y = imu_array[1,0]
-                imu_msg.linear_acceleration.z = imu_array[2,0]
-                rospy.loginfo(imu_msg.linear_acceleration.x)
-                pub.publish(imu_msg)
-                rate.sleep()   
-        except: 
-            pass
+        if imu_array is not None:
+            current_time = rospy.Time.now()
+            imu_msg.header.stamp = current_time
+            imu_msg.header.frame_id = 'imu_frame'
+            # rospy.loginfo(imu_array)
+            imu_msg.linear_acceleration.x = imu_array[0]
+            imu_msg.linear_acceleration.y = imu_array[1]
+            imu_msg.linear_acceleration.z = imu_array[2]
+            rospy.loginfo(imu_msg.linear_acceleration.x)
+            pub.publish(imu_msg)
+            rate.sleep()   
+        # except: 
+        #     pass
 
 # if __name__ == '__main__':
 #     try:
