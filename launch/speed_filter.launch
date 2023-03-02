@@ -2,7 +2,7 @@
     <!-- Aca declaramos los nodos -->
     <!-- <node pkg="speed_stimation" cwd="node" type="speed_filter" name="filter_node"/> -->
     <node pkg="speed_stimation" cwd="node" type="publish_gps" name="gps_node"/>
-    <node pkg="speed_stimation" cwd="node" type="publish_imu_vector" name="imu_node"/>
-    <node pkg="speed_stimation" cwd="node" type="sender_mqtt" name="sender_node"/>
+    <node pkg="speed_stimation" cwd="node" type="publish_imu_vector" name="imu_vector_node"/>
+    <!-- <node pkg="speed_stimation" cwd="node" type="sender_mqtt" name="sender_node"/> -->
 
 </launch>
