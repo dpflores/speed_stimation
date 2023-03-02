@@ -26,8 +26,8 @@ class SpeedFilter:
         self.Mk = np.array([[1.0]])
         
         # Valores de covarianza 
-        self.Qk = 0.1*np.eye(3)   # este va a variar
-        self.Rk = np.array([[0.01]])
+        self.Qk = 0.1*np.eye(3)         # De nuestro modelo
+        self.Rk = np.array([[0.001]])    # De la medición
 
         # Inicializando filtro de kalman
         self.speed_filter = kalman.ExtendedFilter(self.xk, self.yk, self.uk, self.Pk)
@@ -53,7 +53,7 @@ class SpeedFilter:
         imu_accel = np.array([[ax, ay, az]]).T 
         self.speed_filter.uk = imu_accel
 
-
+        self.Qk += self.dta
 
 
     def gps_callback(self, data):
