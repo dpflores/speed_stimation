@@ -23,9 +23,8 @@ class SpeedFilter:
         # Matrices caracteristicas (estas son constantes, pero Hk no)
         self.Fk = np.eye(3)
         self.Lk = np.eye(3)
-        self.Mk = np.array([[1]])
+        self.Mk = np.array([[1.0]])
         
-
         # Valores de covarianza 
         self.Qk = 0.1*np.eye(3)   # este va a variar
         self.Rk = 0.01*np.eye(3) 
@@ -42,10 +41,10 @@ class SpeedFilter:
 
     def imu_callback(self, data):
         # En esta funcion se haran las predicciones
-
+        print(self.speed_filter.xk, self.speed_filter.uk)
         # Primero hace la predicción con lo que ya tenemosf
         f = self.speed_filter.xk + self.dt@self.speed_filter.uk
-        print(f)
+        
         self.speed_filter.prediction_step(f, self.Fk, self.Lk, self.Qk)
 
         ax = data.linear_acceleration.x
