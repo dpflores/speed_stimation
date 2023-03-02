@@ -82,7 +82,8 @@ class SpeedFilter:
         while not rospy.is_shutdown():
         
             # Publica la velocidad filtrada
-            speed_filtered = np.linalg.normm(self.speed_filter.xk)
+            speed_filtered = np.linalg.norm(self.speed_filter.xk)
+            rospy.loginfo(speed_filtered)
             self.vel_filtrada_pub.publish(speed_filtered)
 
             # Espera para mantener la frecuencia de muestreo
