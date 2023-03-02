@@ -16,7 +16,7 @@ class MqttSender:
         self.dt = 0.1
         # Subscriptores a los tópicos de interes
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback,"/gps_speed")
-        rospy.Subscriber("/imu_accel", Float32, self.imu_callback,"/imu_accel")
+        # rospy.Subscriber("/imu_accel", Float32, self.imu_callback,"/imu_accel")
         rospy.Subscriber("/speed_filtered", Float32, self.filter_callback,"/speed_filtered")  
 
         # mqtt
