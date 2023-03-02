@@ -58,7 +58,7 @@ class SpeedFilter:
 
     def gps_callback(self, data):
         # En esta funcion se haran las correcciones
-        
+        print(self.speed_filter.xk)
         vx = self.speed_filter.xk[0,0]
         vy = self.speed_filter.xk[0,1]
         vz = self.speed_filter.xk[0,2]
