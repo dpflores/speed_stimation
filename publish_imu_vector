@@ -24,7 +24,7 @@ def talker():
                 imu_msg.linear_acceleration.x = imu_array[0,0]
                 imu_msg.linear_acceleration.y = imu_array[1,0]
                 imu_msg.linear_acceleration.z = imu_array[2,0]
-                rospy.loginfo(imu_msg)
+                rospy.loginfo(imu_msg.linear_acceleration.x)
                 pub.publish(imu_msg)
                 rate.sleep()   
         except: 
