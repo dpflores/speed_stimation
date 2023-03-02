@@ -11,6 +11,7 @@ def talker():
     pub = rospy.Publisher('imu_accel_vector',Imu, queue_size=10)
     rospy.init_node('imu_vector_node', anonymous=True)
     rate = rospy.Rate(10) # 10hz
+    
     while not rospy.is_shutdown():
         try:
             imu_array = imu.get_accel()
@@ -19,7 +20,7 @@ def talker():
                 rospy.loginfo(imu_array)
                 imu_msg.linear_acceleration.x = imu_array[0,0]
                 imu_msg.linear_acceleration.y = imu_array[1,0]
-                imu_msg.linear_acceleration.z = imu_array[1,0]
+                imu_msg.linear_acceleration.z = imu_array[2,0]
                 pub.publish(imu_msg)
                 rate.sleep()   
         except: 
