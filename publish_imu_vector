@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import rospy
+from sensor_msgs.msg import Imu
+from can_jd.can_jd import CANJD 
+import numpy as np
+
+imu = CANJD()   
+def talker():
+    imu_msg = Imu()
+    pub = rospy.Publisher('imu_accel',Imu, queue_size=10)
+    rospy.init_node('imu_node', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        try:
+            imu_array = imu.get_accel()
+
+            if imu_array is not None:
+                rospy.loginfo(imu_array)
+                imu_msg.linear_acceleration.x = imu_array[0,0]
+                imu_msg.linear_acceleration.y = imu_array[1,0]
+                imu_msg.linear_acceleration.z = imu_array[1,0]
+                pub.publish(imu_msg)
+                rate.sleep()   
+        except: 
+            pass
+
+# if __name__ == '__main__':
+#     try:
+#         talker()
+#     except rospy.ROSInterruptException:
+#         pass
+
+if __name__ == '__main__':
+    talker()

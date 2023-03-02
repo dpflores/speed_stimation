@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-''' En este código, se utiliza el extended Kalman Filter porque y=sqrt(vx**2 + vy**2)'''
+''' La parte equivocada acá es que el sistema no consiedra aceleraciones negativas,
+por lo que la velocidad estimada siempre aumentará'''
 
 import rospy
 import numpy as np
@@ -14,23 +15,22 @@ class SpeedFilter:
         self.dt = np.array([[self.dta]])
 
         # Valores iniciales
-        self.xk = np.array([[0.0, 0.0, 0.0]]).T    
-        self.yk = np.array([[0.0]])
-        self.uk = np.array([[0.0, 0.0, 0.0]]).T  
-        self.Pk = 0.1*np.eye(3)
+        self.xk = np.array([[0.0]])    
+        self.yk = np.array([[0.0]]) 
+        self.uk = np.array([[0.0]]) 
+        self.Pk = np.array([[0.01]])
 
-        # Matrices caracteristicas (estas son constantes, pero Hk no)
-        self.Fk = np.eye(3)
-        self.Lk = np.eye(3)
-        self.Mk = np.array([[1]])
-        
+        # Matrices caracteristicas (en este caso solo son valores)
+        self.Fk = np.array([[1.0]])
+        self.Gk = np.array([[self.dta]])
+        self.Hk = np.array([[1.0]])
 
         # Valores de covarianza 
-        self.Qk = 0.1*np.eye(3)   # este va a variar
-        self.Rk = 0.01*np.eye(3) 
+        self.Qk = np.array([[self.dta**2]])   # este va a variar
+        self.Rk = np.array([[0.01]]) 
 
         # Inicializando filtro de kalman
-        self.speed_filter = kalman.ExtendedFilter(self.xk, self.yk, self.uk, self.Pk)
+        self.speed_filter = kalman.LinearFilter(self.xk, self.yk, self.uk, self.Pk)
 
         # Subscriptores a los tópicos de velocidad
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
@@ -42,32 +42,22 @@ class SpeedFilter:
     def imu_callback(self, data):
         # En esta funcion se haran las predicciones
 
-        # Primero hace la predicción con lo que ya tenemosf
-        f = self.speed_filter.xk + self.dt@self.speed_filter.uk
-        self.speed_filter.prediction_step(f, self.Fk, self.Lk, self.Qk)
+        # Primero hace la predicción con lo que ya tenemos
+        self.speed_filter.prediction_step(self.Fk, self.Gk, self.Qk)
 
         # luego se actualizan los valores
-        imu_accel = np.array([[data.data]])     ## CORREGIR LOS 3 DATOS
+        imu_accel = np.array([[data.data]])
         self.speed_filter.uk = imu_accel
 
+        #self.Qk += self.dt
 
 
 
     def gps_callback(self, data):
         # En esta funcion se haran las correcciones
-        
-        vx = self.speed_filter.xk[0,0]
-        vy = self.speed_filter.xk[0,1]
-        vz = self.speed_filter.xk[0,2]
-
-        va = (vx**2 + vy**2 + vz**2)**(-1/2)    # constante solo para facilitar el trabajo
-
-        h = np.sqrt(vx**2 + vy**2 + vz**2)
-
-        self.Hk = np.array([[vx*va, vy*va, vz*va]])
 
         # Primero hace la correción con lo que ya tenemos
-        self.speed_filter.correction_step(h, self.Hk,self.Mk, self.Rk)
+        self.speed_filter.correction_step(self.Hk,self.Rk)
 
         # Ahora si actualizamos
         gps_vel = np.array([[data.data]])
