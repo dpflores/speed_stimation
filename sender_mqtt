@@ -31,7 +31,7 @@ class MqttSender:
     def gps_callback(self, data):
         self.gps_speed = data.data
 
-    def filter_callback(self, data, topic):
+    def filter_callback(self, data):
         self.filtered_speed = data.data
         
 
