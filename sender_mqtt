@@ -17,9 +17,11 @@ class MqttSender:
         self.dt = 0.5
         self.filtered_speed = 0
         self.gps_speed = 0
+        self.obd2_speed = 0
         # Subscriptores a los tópicos de interes
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
-        rospy.Subscriber("/speed_filtered", Float32, self.filter_callback)  
+        rospy.Subscriber("/speed_filtered", Float32, self.filter_callback) 
+        rospy.Subscriber("/obd2_speed", Float32, self.obd2_callback)  
 
         # mqtt
         self.client = mqtt.Client()  
@@ -33,6 +35,9 @@ class MqttSender:
 
     def filter_callback(self, data):
         self.filtered_speed = data.data
+
+    def obd2_callback(self, data):
+        self.obd2_speed = data.data
         
 
     def run(self):
@@ -42,6 +47,7 @@ class MqttSender:
             # Publicamos al broker cada 0.5 s
             self.client.publish("/gps_speed", self.gps_speed)
             self.client.publish("/speed_filtered", self.filtered_speed)
+            self.client.publish("/obd2_speed", self.obd2_speed)
             self.client.loop()
             rospy.sleep(self.dt)
 
