@@ -84,6 +84,7 @@ class SpeedFilter:
         
             # Publica la velocidad filtrada
             speed_filtered = np.linalg.norm(self.speed_filter.xk)
+            speed_filtered = np.round(speed_filtered,1)
             rospy.loginfo(speed_filtered)
             self.vel_filtrada_pub.publish(speed_filtered)
 
