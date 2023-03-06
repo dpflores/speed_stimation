@@ -52,9 +52,8 @@ class DataLogger:
     
     # General functions
     def clear_file(self, filename):
-        with open(filename,"w") as file:
-            
-            file.close()
+        file = open(filename,"w+")
+        file.close()
 
 
     def write_to_file(self, filename, *args):
