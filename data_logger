@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+
+import rospy
+import paho.mqtt.client as mqtt
+from std_msgs.msg import Float32
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+output_file_path = os.path.join(current_dir, 'data/test.txt')
+
+USERNAME = 'AxotecPiloto'
+PASSWORD = '1234567890'
+
+# Server de ACME
+MQTT_SERVER = 'soldier.cloudmqtt.com'
+MQTT_PORT = 15258
+
+            
+class DataLogger:
+    def __init__(self):
+        self.dt = 0.1
+        self.filtered_speed = 0
+        self.gps_speed = 0
+        self.obd2_speed = 0
+        # Subscriptores a los tópicos de interes
+        rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
+        rospy.Subscriber("/speed_filtered", Float32, self.filter_callback) 
+        rospy.Subscriber("/obd2_speed", Float32, self.obd2_callback)  
+
+        self.record = False
+        # mqtt
+        self.client = mqtt.Client() 
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message 
+        self.client.username_pw_set(USERNAME, PASSWORD)
+        self.client.connect(MQTT_SERVER, MQTT_PORT,60)
+        self.client.loop_start()
+
+    # función que se ejecuta al conectarse al broker MQTT
+    def on_connect(self, client, userdata, flags, rc):
+        print("Conectado al broker MQTT con resultado: " + str(rc))
+        # suscribirse al tópico deseado
+        client.subscribe("/record_data")
+
+    # función que se ejecuta al recibir un mensaje en el tópico suscrito
+    def on_message(self, client, userdata, msg):
+        if msg.payload == 'True':
+            self.record = True
+        else:
+            self.record = False
+        
+    
+    # General functions
+    def clear_file(self, filename):
+        file = open(filename,"w")
+        file.close()
+
+
+    def write_to_file(self, filename, *args):
+        
+
+        # Ahora si escribimos
+        with open(filename, 'a') as file:
+                # unir los argumentos separados por comas
+                linea = ','.join(str(arg) for arg in args)
+                # escribir la línea en el archivo
+                file.write(linea + '\n')
+
+
+    # Callbacks
+    def gps_callback(self, data):
+        self.gps_speed = data.data
+
+    def filter_callback(self, data):
+        self.filtered_speed = data.data
+
+    def obd2_callback(self, data):
+        self.obd2_speed = data.data
+        
+
+    def run(self):
+        # Bucle principal
+        self.clear_file(output_file_path)
+
+        while not rospy.is_shutdown():
+            # Espera para mantener la frecuencia de muestreo
+            # Escribimos el archivo cada 0.1 s
+            if self.record:
+                self.write_to_file(output_file_path, self.obd2_speed, self.filtered_speed, self.gps_speed)
+            else: 
+                self.clear_file(output_file_path)
+            rospy.sleep(self.dt)
+
+if __name__ == '__main__':
+    # Inicializa el nodo ROS
+    rospy.init_node('data_logger')
+
+    # Crea un objeto ComplementaryFilter
+    dl = DataLogger()
+
+    # Ejecuta el filtro complementario
+    dl.run()
+
+    # Para la ejecución del nodo ROS
+    rospy.spin()
+
