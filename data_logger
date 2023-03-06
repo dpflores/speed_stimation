@@ -19,14 +19,15 @@ MQTT_PORT = 15258
 class DataLogger:
     def __init__(self):
         self.dt = 0.1
-        self.filtered_speed = 0
-        self.gps_speed = 0
-        self.obd2_speed = 0
+        self.current_time = 0.0
+        self.filtered_speed = 0.0
+        self.gps_speed = 0.0
+        self.obd2_speed = 0.0
         # Subscriptores a los tópicos de interes
         rospy.Subscriber("/gps_speed", Float32, self.gps_callback)
         rospy.Subscriber("/speed_filtered", Float32, self.filter_callback) 
         rospy.Subscriber("/obd2_speed", Float32, self.obd2_callback)  
-
+        
         self.record = False
         self.restart = False
         # mqtt
@@ -90,7 +91,7 @@ class DataLogger:
             # Espera para mantener la frecuencia de muestreo
             # Escribimos el archivo cada 0.1 s
             if self.record:
-                self.write_to_file(output_file_path, self.obd2_speed, self.filtered_speed, self.gps_speed)
+                self.write_to_file(output_file_path, self.current_time, self.obd2_speed, self.filtered_speed, self.gps_speed)
                 rospy.loginfo('Writing')
             else: 
                 rospy.loginfo('Stopped')
@@ -100,7 +101,9 @@ class DataLogger:
                 self.clear_file(output_file_path)
                 self.record = True
                 self.restart = False
-
+                self.current_time = 0
+                
+            self.current_time += self.dt
             rospy.sleep(self.dt)
 
 if __name__ == '__main__':
