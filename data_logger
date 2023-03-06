@@ -57,14 +57,11 @@ class DataLogger:
 
 
     def write_to_file(self, filename, *args):
-        
-
-        # Ahora si escribimos
         with open(filename, 'a') as file:
-                # unir los argumentos separados por comas
-                linea = ','.join(str(arg) for arg in args)
-                # escribir la línea en el archivo
-                file.write(linea + '\n')
+            # unir los argumentos separados por comas
+            linea = ','.join(str(arg) for arg in args)
+            # escribir la línea en el archivo
+            file.write(linea + '\n')
 
 
     # Callbacks
@@ -87,8 +84,10 @@ class DataLogger:
             # Escribimos el archivo cada 0.1 s
             if self.record:
                 self.write_to_file(output_file_path, self.obd2_speed, self.filtered_speed, self.gps_speed)
+                rospy.loginfo('Writing')
             else: 
                 self.clear_file(output_file_path)
+                rospy.loginfo('Stopped')
             rospy.sleep(self.dt)
 
 if __name__ == '__main__':
