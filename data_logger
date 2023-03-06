@@ -52,7 +52,7 @@ class DataLogger:
     
     # General functions
     def clear_file(self, filename):
-        with open(filename,"w+") as file:
+        with open(filename,'w+') as file:
             file.close()
 
 
