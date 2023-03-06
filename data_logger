@@ -28,7 +28,7 @@ class DataLogger:
         rospy.Subscriber("/obd2_speed", Float32, self.obd2_callback)  
 
         self.record = False
-        self.restart = True
+        self.restart = False
         # mqtt
         self.client = mqtt.Client() 
         self.client.on_connect = self.on_connect
@@ -50,7 +50,7 @@ class DataLogger:
         rospy.loginfo(message)
         if message == 'Start':
             self.record = True
-        elif message == 'Stopped':
+        elif message == 'Stop':
             self.record = False
         elif message == 'Restart':
             self.restart = True
