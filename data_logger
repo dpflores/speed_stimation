@@ -44,6 +44,7 @@ class DataLogger:
 
     # función que se ejecuta al recibir un mensaje en el tópico suscrito
     def on_message(self, client, userdata, msg):
+        rospy.loginfo(msg.payload)
         if msg.payload == 'True':
             self.record = True
         else:
