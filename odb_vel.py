@@ -1,6 +1,5 @@
 import time
 import os
-import sys
 import can
 
 # In the extension we shall bring up the interfaces directly within our Python app

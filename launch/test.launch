@@ -5,4 +5,6 @@
     <node pkg="speed_stimation" cwd="node" type="publish_imu" name="imu_node"/>
     <node pkg="speed_stimation" cwd="node" type="sender_mqtt" name="sender_node"/>
 
+    <node pkg="speed_stimation" cwd="node" type="publish_obd2" name="obd2_node"/>
+
 </launch>

@@ -17,6 +17,8 @@ sudo apt-get install ros-noetic-catkin
 
 sudo apt-get install cmake
 
+sudo apt-get install iproute2
+
 
 
 
