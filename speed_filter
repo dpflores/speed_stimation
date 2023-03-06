@@ -49,6 +49,7 @@ class SpeedFilter:
         ax = np.round(data.linear_acceleration.x,0)
         ay = np.round(data.linear_acceleration.y,0)
         az = np.round(data.linear_acceleration.z,0)
+        az = 0
         # luego se actualizan los valores
         imu_accel = np.array([[ax, ay, az]]).T 
         self.speed_filter.uk = imu_accel
