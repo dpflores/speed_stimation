@@ -99,6 +99,7 @@ class DataLogger:
                 rospy.loginfo('Restart')
                 self.clear_file(output_file_path)
                 self.record = True
+                self.restart = False
 
             rospy.sleep(self.dt)
 
