@@ -40,7 +40,8 @@ def talker():
             #print(message_velocidad.arbitration_id)
             #print(message_velocidad.data)
             if message_velocidad is None:
-                print('Timeout occurred, no message.')
+                
+                rospy.loginfo('Timeout occurred, no message.')
                 #sys.exit(1)
 
             # Check if received the expected response message
