@@ -28,6 +28,7 @@ class DataLogger:
         rospy.Subscriber("/obd2_speed", Float32, self.obd2_callback)  
 
         self.record = False
+        self.restart = True
         # mqtt
         self.client = mqtt.Client() 
         self.client.on_connect = self.on_connect
@@ -47,10 +48,13 @@ class DataLogger:
         
         message = msg.payload.decode('UTF-8') 
         rospy.loginfo(message)
-        if message == 'True':
+        if message == 'Start':
             self.record = True
-        else:
+        elif message == 'Stopped':
             self.record = False
+        elif message == 'Restart':
+            self.restart = True
+
         
     
     # General functions
@@ -89,8 +93,13 @@ class DataLogger:
                 self.write_to_file(output_file_path, self.obd2_speed, self.filtered_speed, self.gps_speed)
                 rospy.loginfo('Writing')
             else: 
-                self.clear_file(output_file_path)
                 rospy.loginfo('Stopped')
+            
+            if self.restart:
+                rospy.loginfo('Restart')
+                self.clear_file(output_file_path)
+                self.record = True
+
             rospy.sleep(self.dt)
 
 if __name__ == '__main__':
