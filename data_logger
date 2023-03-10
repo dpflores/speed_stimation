@@ -84,9 +84,7 @@ class DataLogger:
         
 
     def run(self):
-        # Bucle principal
-        self.clear_file(output_file_path)
-
+        
         while not rospy.is_shutdown():
             # Espera para mantener la frecuencia de muestreo
             # Escribimos el archivo cada 0.1 s

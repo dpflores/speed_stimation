@@ -46,9 +46,9 @@ class SpeedFilter:
         
         self.speed_filter.prediction_step(f, self.Fk, self.Lk, self.Qk)
 
-        ax = np.round(data.linear_acceleration.x,1)*12960
-        ay = np.round(data.linear_acceleration.y,1)*12960
-        az = np.round(data.linear_acceleration.z,1)*12960
+        ax = np.round(data.linear_acceleration.x,1)
+        ay = np.round(data.linear_acceleration.y,1)
+        az = np.round(data.linear_acceleration.z,1)
         az = 0
         # luego se actualizan los valores
         imu_accel = np.array([[ax, ay, az]]).T 
@@ -76,7 +76,7 @@ class SpeedFilter:
         self.speed_filter.correction_step(h, self.Hk,self.Mk, self.Rk)
 
         # Ahora si actualizamos
-        gps_vel = np.array([[data.data]])
+        gps_vel = np.array([[data.data]])*0.2778    # de km/h a m/s
         self.speed_filter.yk = gps_vel
 
 
