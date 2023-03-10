@@ -16,7 +16,7 @@ class SpeedFilter:
 
         # Valores iniciales
         self.xk = np.array([[0.0001, 0.0001, 0.0001]]).T    
-        self.yk = np.array([[0.0]])
+        self.yk = np.array([[0.0001]])
         self.uk = np.array([[0.0, 0.0, 0.0]]).T  
         self.Pk = 0.1*np.eye(3)
 
@@ -76,7 +76,7 @@ class SpeedFilter:
         self.speed_filter.correction_step(h, self.Hk,self.Mk, self.Rk)
 
         # Ahora si actualizamos
-        gps_vel = np.array([[data.data]])    # de km/h a m/s
+        gps_vel = np.array([[data.data]])*0.27778    # de km/h a m/s
         self.speed_filter.yk = gps_vel
 
 
