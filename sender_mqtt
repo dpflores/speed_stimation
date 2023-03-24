@@ -49,11 +49,12 @@ class MqttSender:
         self.gps_speed = data.data
         # self.client.publish("/gps_speed", self.gps_speed)
 
-        data = {'estimated_speed': self.gps_speed}
-
+        data3 = {'gps_speed': self.obd2_speed}
+        
         # Envío de los datos por MQTT
-        self.client2.publish(TOPIC, json.dumps(data))
+        self.client2.publish(TOPIC, json.dumps(data3))
 
+        
     def filter_callback(self, data):
         self.filtered_speed = data.data
         # self.client.publish("/speed_filtered", self.filtered_speed)
@@ -67,10 +68,13 @@ class MqttSender:
         self.obd2_speed = data.data
         # self.client.publish("/obd2_speed", self.obd2_speed)
 
-        data3 = {'gps_speed': self.obd2_speed}
-        
+        data = {'estimated_speed': self.gps_speed}
+
         # Envío de los datos por MQTT
-        self.client2.publish(TOPIC, json.dumps(data3))
+        self.client2.publish(TOPIC, json.dumps(data))
+
+
+        
         
 
     def run(self):
