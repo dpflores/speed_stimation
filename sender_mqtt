@@ -4,6 +4,8 @@ import rospy
 import paho.mqtt.client as mqtt
 from std_msgs.msg import Float32
 
+import json
+
 USERNAME = 'AxotecPiloto'
 PASSWORD = '1234567890'
 
@@ -11,6 +13,12 @@ PASSWORD = '1234567890'
 MQTT_SERVER = 'soldier.cloudmqtt.com'
 MQTT_PORT = 15258
 
+
+
+# Configuración del cliente MQTT
+THINGSBOARD_HOST = '67.205.184.64'
+ACCESS_TOKEN = 'ymQYDnqXHea2HhfTWtti'
+TOPIC = 'v1/devices/me/telemetry'
 
 class MqttSender:
     def __init__(self):
@@ -28,16 +36,41 @@ class MqttSender:
         self.client.username_pw_set(USERNAME, PASSWORD)
         self.client.connect(MQTT_SERVER, MQTT_PORT,60)
         self.client.loop_start()
+        
 
+        self.client2 = mqtt.Client()
+        self.client2.username_pw_set(ACCESS_TOKEN)
+
+        # Conexión al servidor MQTT de Thingsboard
+        self.client2.connect(THINGSBOARD_HOST, 1883, 60)
+        self.client2.loop_start()
 
     def gps_callback(self, data):
         self.gps_speed = data.data
+        self.client.publish("/gps_speed", self.gps_speed)
+
+        data = {'estimated_speed': self.gps_speed}
+
+        # Envío de los datos por MQTT
+        self.client2.publish(TOPIC, json.dumps(data))
 
     def filter_callback(self, data):
         self.filtered_speed = data.data
+        self.client.publish("/speed_filtered", self.filtered_speed)
+
+        data2 = {'obd_speed': self.filtered_speed}
+        
+        # Envío de los datos por MQTT
+        self.client2.publish(TOPIC, json.dumps(data2))
 
     def obd2_callback(self, data):
         self.obd2_speed = data.data
+        self.client.publish("/obd2_speed", self.obd2_speed)
+
+        data3 = {'gps_speed': self.obd2_speed}
+        
+        # Envío de los datos por MQTT
+        client.publish(TOPIC, json.dumps(data3))
         
 
     def run(self):
@@ -45,10 +78,10 @@ class MqttSender:
         while not rospy.is_shutdown():
             # Espera para mantener la frecuencia de muestreo
             # Publicamos al broker cada 0.5 s
-            self.client.publish("/gps_speed", self.gps_speed)
-            self.client.publish("/speed_filtered", self.filtered_speed)
-            self.client.publish("/obd2_speed", self.obd2_speed)
+            
+        
             self.client.loop()
+            self.client2.loop()
             rospy.sleep(self.dt)
 
 if __name__ == '__main__':
